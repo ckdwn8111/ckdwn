@@ -2,196 +2,181 @@
 #include <time.h>
 #include <stdlib.h>
 
-int **Array_first = NULL;
-int **Array_second = NULL;
-int i, j = 0;
 
-//struct Array_format Array_first;
-//struct Array_format Array_second;
+static int i, j, k = 0;
 
-void arrayInput(int row, int col, int row_2, int col_2) {
 
-	 //struct Array_format array_1 = { .arrData = NULL,.row = 0,.col = 0 };
+
+void arrayInput(struct Array_format *Array_first_p, struct Array_format *Array_second_p) {
+
+		
 		srand(time(NULL));
-		Array_first = (int **)malloc(sizeof(int *)*row);
+		
+		Array_first_p -> arrData = (int **)malloc(sizeof(int *)*(Array_first_p -> row));
 
-		for (i = 0; i < row; i++) {
-			Array_first[i] = (int *)malloc(sizeof(int)*col);
-		}
-		if (Array_first == NULL) {
+		if (Array_first_p->arrData == NULL) {
 			printf("Heap is full");
 			exit(-1);
 		}
 
-		for (i = 0; i < row; i++) {
-			for (j = 0; j < col; j++) {
-				Array_first[i][j] = (rand() % MAX + 1);
-				if (Array_first == NULL) {
-					printf("Heap is full");
-					exit(-1);
-				}
+		for (i = 0; i < Array_first_p->row; i++) {
+			(Array_first_p->arrData)[i] = (int *)malloc(sizeof(int)*(Array_first_p -> col));
+			if (Array_first_p -> arrData == NULL) {
+				printf("Heap is full");
+				exit(-1);
+			}
+		}
+		
+
+
+		for (i = 0; i < Array_first_p -> row; i++) {
+			for (j = 0; j < Array_first_p -> col; j++) {
+				(Array_first_p->arrData)[i][j] = (rand() % MAX + 1);
+				
 			}
 		}
 
-		Array_second = (int **)malloc(sizeof(int *)*row_2);
-
-		for (i = 0; i < row_2; i++) {
-			Array_second[i] = (int *)malloc(sizeof(int)*col_2);
-		}
-		if (Array_second == NULL) {
+		Array_second_p -> arrData = (int **)malloc(sizeof(int *)*(Array_second_p -> row));
+		
+		if (Array_second_p->arrData == NULL) {
 			printf("Heap is full");
 			exit(-1);
 		}
-		for (i = 0; i < row_2; i++) {
-			for (j = 0; j < col_2; j++) {
-				Array_second[i][j] = (rand() % MAX + 1);
-				if (Array_second == NULL) {
-					printf("Heap is full");
-					exit(-1);
-				}
+
+		for (i = 0; i < (Array_second_p->row); i++) {
+			(Array_second_p->arrData)[i] = (int *)malloc(sizeof(int)*(Array_second_p->col));
+			if (Array_second_p->arrData == NULL) {
+				printf("Heap is full");
+				exit(-1);
 			}
 		}
-
-		for (i = 0; i < row; i++) {
-			for (j = 0; j < col; j++) {
-				Array_first[i][j] = (rand() % MAX + 1);
+		
+		for (i = 0; i < (Array_second_p->row); i++) {
+			for (j = 0; j < Array_second_p -> col; j++) {
+				(Array_second_p -> arrData)[i][j] = (rand() % MAX + 1);
 			}
 		}
-
-		Array_second = (int **)malloc(sizeof(int *)*row_2);
-
-		for (i = 0; i < row_2; i++) {
-			Array_second[i] = (int *)malloc(sizeof(int)*col_2);
-		}
-
-		for (i = 0; i < row_2; i++) {
-			for (j = 0; j < col_2; j++) {
-				Array_second[i][j] = (rand() % MAX + 1);
-			}
-		}
-
-		for (i = 0; i < row; i++) {
-			for (j = 0; j < col; j++) {
-				printf("%5d  ", Array_first[i][j]);
-			}
-			puts("");
-		}
-
-		puts("");
-
-		for (i = 0; i < row_2; i++) {
-			for (j = 0; j < col_2; j++) {
-				printf("%5d  ", Array_second[i][j]);
-			}
-			puts("");
-		}
-
-		puts("");
+	
 
 }
 
 
-void arrayFree(int row, int row_2) {
+void arrayFree(struct Array_format *Array_first_p, struct Array_format *Array_second_p) {
 	
 	
-	int i = 0;
-	for (i = 0; i < row; i++) {
-		free(Array_first[i]);
-	}
-	free(Array_first);
 
-	for (i = 0; i < row_2; i++) {
-		free(Array_second[i]);
+	for (i = 0; i < Array_first_p -> row; i++) {
+		free(Array_first_p -> arrData[i]);
 	}
-	free(Array_second);
+	free(Array_first_p -> arrData);
+
+	for (i = 0; i < Array_second_p -> row; i++) {
+		free(Array_second_p -> arrData[i]);
+	}
+	free(Array_second_p -> arrData);
+
+	
+	
+}
+
+
+struct Array_format arrayAdd(struct Array_format Array_first, struct Array_format Array_second) {
+
+
+
+	for (i = 0; i < Array_first.row; i++) {
+		for (j = 0; j < Array_first.col; j++) {
+			Array_first.arrData[i][j] = Array_first.arrData[i][j] + Array_second.arrData[i][j];
+		}
+	}
+
+	
+	return Array_first;
 
 }
 
-void arrayAdd(int row, int col) {
+struct Array_format arraySubtract(struct Array_format Array_first, struct Array_format Array_second) {
 
-	int i, j = 0;
+	
 
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col; j++) {
-			Array_first[i][j] = Array_first[i][j] + Array_second[i][j];
+	for (i = 0; i < Array_first.row; i++) {
+		for (j = 0; j < Array_first.col; j++) {
+			Array_first.arrData[i][j] = Array_first.arrData[i][j] - Array_second.arrData[i][j];
 		}
 	}
 
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col; j++) {
-			printf("%5d  ", Array_first[i][j]);
-		}
-		puts("");
-	}
-	puts("");
+	
+	return Array_first;
 
 }
 
-void arraySubtract(int row, int col) {
+struct Array_format* arrayMultiply(struct Array_format *Array_first_p, struct Array_format *Array_second_p) {
 
-	int i, j = 0;
-
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col; j++) {
-			Array_first[i][j] = Array_first[i][j] - Array_second[i][j];
-		}
-	}
-
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col; j++) {
-			printf("%5d  ", Array_first[i][j]);
-		}
-		puts("");
-	}
-	puts("");
-
-}
-
-void arrayMultiply(int row, int col, int row_2, int col_2) {
-
-	int i, j, k = 0;
+	
 	int **result = NULL;
 
-	result = (int**)malloc(sizeof(int*)*row);
+	result = (int**)malloc(sizeof(int*)*(Array_first_p->row));
 
 	if (result == NULL) {
-		printf("result°¡ µ¿ÀûÇÒ´ç ¾ÈµÊ...Á×À½... ¤Ð¤Ð");
-		return;
+		printf("Heap is full");
+		exit(-1);
 	}
 
-	for (i = 0; i < row; i++) {
-		result[i] = (int*)malloc(sizeof(int)*col_2);
+	for (i = 0; i < Array_first_p->row; i++) {
+		result[i] = (int*)malloc(sizeof(int)*(Array_second_p->col));
 		if (result[i] == NULL) {
-			printf("result°¡ µ¿ÀûÇÒ´ç ¾ÈµÊ...Á×À½... ¤Ð¤Ð");
-			return;
+			printf("Heap is full");
+			exit(-1);
 		}
 	}
 
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col_2; j++) {
+	for (i = 0; i < Array_first_p->row; i++) {
+		for (j = 0; j < Array_second_p->col; j++) {
 			result[i][j] = 0;
 		}
 	}
 
-	for (k = 0; k < row; k++) {
-		for (j = 0; j < col_2; j++) {
-			for (i = 0; i < col; i++) {
-				result[k][j] += Array_first[k][i] * Array_second[i][j];
+	for (k = 0; k < Array_first_p->row; k++) {
+		for (j = 0; j < Array_second_p->col; j++) {
+			for (i = 0; i < Array_first_p->col; i++) {
+				result[k][j] += (Array_first_p -> arrData[k][i]) * (Array_second_p -> arrData[i][j]);
 			}
 		}
 	}
 
-	for (i = 0; i < row; i++) {
-		for (j = 0; j < col_2; j++) {
-			printf("%5d  ", result[i][j]);
-		}
-		puts("");
+	for (i = 0; i < Array_first_p->row; i++) {
+		free(Array_first_p->arrData[i]);
+	}
+	free(Array_first_p->arrData);
+
+	Array_first_p->arrData = (int**)malloc(sizeof(int*)*(Array_first_p->row));
+	if (Array_first_p->arrData == NULL) {
+		printf("Heap is full");
+		exit(-1);
 	}
 
-	for (i = 0; i < row; i++) {
+	for (i = 0; i < Array_first_p->row; i++) {
+		Array_first_p->arrData[i] = (int*)malloc(sizeof(int)*(Array_second_p->col));
+		if (Array_first_p->arrData[i] == NULL) {
+			printf("Heap is full");
+			exit(-1);
+		}
+	}
+
+	Array_first_p->col = Array_second_p->col;
+
+	for (i = 0; i < Array_first_p->row; i++) {
+		for (j = 0; j < Array_second_p->col; j++) {
+			Array_first_p->arrData[i][j] = result[i][j] ;
+		}
+	}
+	
+	for (i = 0; i < Array_first_p->row; i++) {
 		free(result[i]);
 	}
 	free(result);
+
+	return Array_first_p;
 }
 
 void array_2by2_Reverse(void){
@@ -274,5 +259,13 @@ void array_2by2_Reverse(void){
 
 }
 
-
+void printArray(struct Array_format* Array_first_p) {
+	for (i = 0; i < Array_first_p->row; i++) {
+		for (j = 0; j < Array_first_p->col; j++) {
+			printf("%5d  ", Array_first_p->arrData[i][j]);
+		}
+		puts("");
+	}
+	puts("");
+}
 	
